@@ -13,7 +13,7 @@ void send2displays(unsigned char value) {
 
 	if( displayFlag==0 ) {
 		// selecy display high
-		LATDbits.LATD5 = 0;
+		LATDbits.LATD5 = 0
 		LATDbits.LATD6 = 1;
 
 		// send digit_high (dh) to display

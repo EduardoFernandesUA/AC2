@@ -10,8 +10,8 @@ void send2displays(unsigned char value) {
 	static const char display7Scodes[] = {0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x67,0x77,0x7C,0x39,0x5E,0x79,0x71};
 	static char displayFlag = 0;
 
-	LATDbits.LATD5 = displayFlag;
-	LATDbits.LATD6 = displayFlag ^ 1;
+	LATDbits.LATD5 = displayFlag ^ 1;
+	LATDbits.LATD6 = displayFlag;
 
 	char value_normalized = (value >> displayFlag*4) & 0x0F;
 	char segment = display7Scodes[ value_normalized ];
@@ -29,24 +29,26 @@ void send2leds(char bin) {
 	LATE = (LATE & 0xFF00) | bin;
 }
 
-void blink(char n, unsigned int delay) {
+void blink(char n, unsigned int ms) {
 	int on = 0, i=0;
 	do{
 		if(on) send2displays(toBcd(n));
 		else LATD = (LATD & 0xFF9F) | 0x0000;
 
-		if( i%delay/10 == 0 ) on = on ^ 1;
+		if( i%(ms/10) == 0 ) on = on ^ 1;
 
 		delay(10);
 	} while( ++i < 100*5 ); // 5sec or 2sec
 }
 
 int main(void) {
-	int counter = 0, i;
+	printf("PROGRAM START\n");
+	int counter, i;
 	TRISB = (TRISB & 0x80F0) | 0x000F;
 	TRISD = (TRISD & 0xFF9F);
 	TRISE = (TRISE & 0xFF00);
 
+	counter = PORTB & 0x01 ? 0 : 59;
 	while(1) {
 		int step = PORTB & 0x01; // step: 1 -> ascending, 0 -> descending
 
