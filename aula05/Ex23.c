@@ -66,8 +66,10 @@ int main(void) {
 			send2leds(toBcd(counter));
 			delay(10); // 10 = 1000/100 -> 100Hz
 		} while( (PORTB & 0x0001)==0x1 ? ++i < 20 : ++i < 50 ); // 50 = (1000/2) / (1000/100)  -> 2Hz / 100Hz
+
 		if( (PORTB & 0x0001) == 0x1 ) counter++;
 		else counter--;
+		
 		if( (PORTB & 0x0001) == 0x1 && counter == 60 ) {
 			blink(60);
 			counter = 0;

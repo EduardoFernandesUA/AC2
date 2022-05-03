@@ -1,10 +1,21 @@
 #!/bin/bash
 
-pcompile $1
 fileName=${1::-2}
 
-if [ $? -eq 0 ]; then
-	ldpic32 $fileName.hex && pterm
+pcompile $1
 
-	rm */*.elf */*.hex */*.map */*.o */*.sym
+port="-p $2"
+if [ -z "$2" ]; then
+    port=""
 fi
+
+if [ $? -eq 0 ]; then
+	ldpic32 $fileName.hex $port
+	
+	if [ $? -eq 0 ]; then
+		pterm $port
+	fi
+
+fi
+
+rm -f */*.elf */*.hex */*.map */*.o */*.sym

@@ -21,7 +21,7 @@ int main(void) {
 	int key;
 	int cnt1 = 0, cnt5 = 0, cnt10 = 0;
 	while(1) {
-		key = inkey()
+		key = inkey();
 
 		if( key=='a' ) delay(50);
 		else delay(100);
