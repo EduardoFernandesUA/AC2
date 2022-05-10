@@ -39,8 +39,6 @@ int main(void) {
     return 0;
 }
 
-550
 
-550 * 33
 
 

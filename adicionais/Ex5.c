@@ -17,7 +17,7 @@ int main() {
         int key = inkey();
 
         if( key>='0' && key<='4' ) {
-            freq = 2 * (1 + key);
+            freq = 2 * (1 + (key-'0'));
         } else if( key==13 ) { // [ENTER]
             printf("\r%4d, %3d Hz", counter, freq);
         }
