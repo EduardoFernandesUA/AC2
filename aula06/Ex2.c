@@ -29,7 +29,7 @@ int main(void) {
         while( IFS1bits.AD1IF == 0 );
         LATDbits.LATD11 = 0;
         aux = ADC1BUF0;
-        // printf("\r%04d", ADC1BUF0);
+        printf("\r%04d", ADC1BUF0);
         IFS1bits.AD1IF = 0;
     }
 
