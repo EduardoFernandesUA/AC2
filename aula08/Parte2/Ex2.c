@@ -10,9 +10,9 @@ void delay(unsigned int ms) {
 
 int main(void) {
     // LED0 config
-    TRISEbits.TRISE0 = 1;
+    TRISEbits.TRISE0 = 0;
     // INT1 config
-    TRISDbits.TRISD8 = 0;
+    TRISDbits.TRISD8 = 1;
 
     // Timer T2 config - 2Hz
     T2CONbits.TCKPS = 7;
@@ -24,9 +24,12 @@ int main(void) {
     IFS0bits.T2IF = 0; // Reset timer T2 interrupt flag 
 
     // INT1 config
-    INTCONbits.INT1EP = 0;
+    IPC1bits.INT1IP = 3; // Interrupt priority 26
+    IEC0bits.INT1IE = 1; // Enable INT1 interrupts
+    IFS0bits.INT1IF = 0; // Reset timer INT1 interrupt flag
 
     EnableInterrupts();
+
     while(1) ;
 
     return 0;
@@ -42,6 +45,7 @@ void _int_(8) isr_T2(void) {
     IFS0bits.T2IF = 0;
 }
 
-void _int_() isr_INT1(void) {
+void _int_(7) isr_INT1(void) {
     count = 3000;
+    IFS0bits.INT1IF = 0;
 }

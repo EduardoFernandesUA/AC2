@@ -1,6 +1,6 @@
 #include <detpic32.h>
 
-volatile int count = 0;
+// volatile int count = 0;
 
 void delay(unsigned int ms) {
 	int K = 20000;
@@ -9,11 +9,14 @@ void delay(unsigned int ms) {
 }
 
 int main(void) {
-    TRISEbits.TRISE0 = 1;
-    TRESDbits.TRISD8 = 0;
+    TRISEbits.TRISE0 = 0;
+    TRISDbits.TRISD8 = 1;
+
+    LATEbits.LATE0 = 0;
 
     while(1) {
-        if( PORTDbits.PORTD8==1 ) {
+        if( PORTDbits.RD8==0 ) {
+            printf("\r1");
             LATEbits.LATE0 = 1;
             delay(3000);
             LATEbits.LATE0 = 0;

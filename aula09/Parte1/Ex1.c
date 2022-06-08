@@ -57,7 +57,7 @@ void configureAll() {
 }
 
 void _int_(4) isr_T1(void) { // read ADC
-    IFS1bits.AD1IF = 0; // Reset A/D interrupt flag
+    AD1CON1bits.ASAM = 1;
     IFS0bits.T1IF = 0; // Reset timer T1 interrupt flag
 }
 
@@ -74,6 +74,8 @@ void _int_(27) isr_adc(void) {
     }
     int avg = sum / 8;
     voltage = ((avg)*33+511)/1023;
+    // printf("\n%d", voltage);
+    IFS1bits.AD1IF = 0;
 }
 
 int main(void) {

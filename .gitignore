@@ -1,6 +1,6 @@
-*/*.elf
-*/*.hex
-*/*.map
-*/*.o
-*/*.sym
+*.elf
+*.hex
+*.map
+*.o
+*.sym
 

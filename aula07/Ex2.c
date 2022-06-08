@@ -4,7 +4,7 @@ volatile unsigned char voltage = 0; // Global variable
 
 // Interrupts service routine (interrupt handler)
 void _int_(27) isr_adc(void) {
-    LATDBits.LATD11 = 0;
+    LATDBits.LATD11 = 1;
     LATD = (LATD & 0xF7FF);
 
     int *p = (int *)(&ADC1BUF0);
