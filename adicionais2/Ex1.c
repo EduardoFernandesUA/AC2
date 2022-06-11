@@ -10,8 +10,8 @@ void refreshDisplays() {
 
     if( n<0 ) return;
 
-    TRISDbits.TRISD5 = sel;
-    TRISDbits.TRISD6 = sel^1;
+    LATDbits.LATD5 = sel;
+    LATDbits.LATD6 = sel^1;
     sel = sel^1;
 
 	LATB = (LATB & 0x80FF) | display7Scodes[ n ] << 8;
