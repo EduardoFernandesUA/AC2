@@ -29,7 +29,7 @@ int main(void) {
 
     // Timer 2 - 100Hz
     T2CONbits.TON = 0;
-    T2CONbits.TCKPS = 4;
+    T2CONbits.TCKPS = 2;
     PR2 = round_div(20000000 , (100 * 4)) - 1;
     TMR2 = 0;
     IPC2bits.T2IP = 1; // prioridade da interrupção (1 a 6)
@@ -57,6 +57,8 @@ int main(void) {
             n = -1;
         }
     }
+
+    return 0;
 }
 
 void _int_(8) isr_timer_2(void)
