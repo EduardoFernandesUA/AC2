@@ -46,7 +46,7 @@ int main(void) {
     int N = 10;
     while(1) {
         AD1CON1bits.ASAM = 1;
-        while( AD1CON1bits.ASAM==1 );
+        while( IFS1bits.AD1IF == 0 );
         int val = N / 2;
         int i = 0;
         for(i = 0;i < N;i++) {
