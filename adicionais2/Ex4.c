@@ -62,23 +62,26 @@ int main(void) {
         AD1CON1bits.ASAM = 1;
 
         resetCoreTimer();
-        while( readCoreTimer()<20000000/10 );
+        while( readCoreTimer()<2000000 );
     }
 
     return 0;
 }
 
-void _int_(20) isr_timer_1(void)
-{
+void _int_(8) isr_timer_2(void) {
+    IFS0bits.T2IF = 0; // limpar o pedido de interrupção
+}
+
+void _int_(20) isr_timer_5(void) {
     static const char display7Scodes[] = {0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x67,0x77,0x7C,0x39,0x5E,0x79,0x71};
     static char flag = 0;
     flag ^= 1;
     LATDbits.LATD5 = flag;
     LATDbits.LATD6 = flag^1;
 
-    char c = flag==0 ? display7Scodes[duty%10] : display7Scodes[duty/10];
+    char c = flag==0 ? display7Scodes[duty/10] : display7Scodes[duty%10];
     if( duty==100 ) {
-        c = 0x4E;
+        c = 0x5C;
         LATCbits.LATC14 = 1;
     } else {
         LATCbits.LATC14 = 0;
