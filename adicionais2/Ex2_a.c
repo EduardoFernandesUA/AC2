@@ -25,13 +25,14 @@ int main(void) {
     // Timer 2 - 50Hz
     T2CONbits.TON = 0;
     T2CONbits.TCKPS = 3;
-    PR2 = round_div(20000000 , (10 * 8)) - 1;
+    PR2 = round_div(20000000 , (50 * 4)) - 1;
     TMR2 = 0;
     IPC2bits.T2IP = 1; // prioridade da interrupção (1 a 6)
     IFS0bits.T2IF = 0; // limpar pedido de interrupção do temporizador x
     IEC0bits.T2IE = 1; // ativar pedidos de interrupção do temporizador x
     T2CONbits.TON = 1;
 
+    EnableInterrupts();
 
     /* END OF CONFIGURATIONS */
 
@@ -46,6 +47,8 @@ void _int_(4) isr_timer_1(void)
 {
     counter++;
     counter = counter % 100;
+    printInt(counter, 2<<8 | 16);
+    putChar('\n');
     IFS0bits.T1IF = 0; // limpar o pedido de interrupção
 }
 
@@ -57,9 +60,9 @@ void _int_(8) isr_timer_2(void)
     LATDbits.LATD6 = flag^1;
 
     if( flag==0 ) {
-        LATB = (LATB & 0x80FF) | display7Scodes[counter%10]<<8; 
+        LATB = (LATB & 0x80FF) | display7Scodes[counter/10]<<8; 
     } else {
-        LATB = (LATB & 0x80FF) | display7Scodes[counter/10]<<8;
+        LATB = (LATB & 0x80FF) | display7Scodes[counter%10]<<8;
     }
 
     IFS0bits.T2IF = 0; // limpar o pedido de interrupção

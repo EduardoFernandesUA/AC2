@@ -8,13 +8,19 @@ void refreshDisplays() {
 	static const char display7Scodes[] = {0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x67,0x77,0x7C,0x39,0x5E,0x79,0x71};
     static char sel = 0;
 
-    if( n<0 ) return;
+    if( n<0 ) {
+        LATDbits.LATD5 = 0;
+        LATDbits.LATD6 = 0;
+        return;
+    };
 
     LATDbits.LATD5 = sel;
     LATDbits.LATD6 = sel^1;
     sel = sel^1;
 
-	LATB = (LATB & 0x80FF) | display7Scodes[ n ] << 8;
+    char c = sel==0 ? display7Scodes[ n%16 ] : display7Scodes[ n/16 ];
+
+	LATB = (LATB & 0x80FF) | c << 8;
 }
 
 int main(void) {
@@ -37,6 +43,8 @@ int main(void) {
     IEC0bits.T2IE = 1; // ativar pedidos de interrupção do temporizador x
     T2CONbits.TON = 1;
 
+
+    EnableInterrupts();
     /* END OF CONFIGURATIONS */ 
 
     LATE &= 0xFFF0;
@@ -44,13 +52,13 @@ int main(void) {
     TRISDbits.TRISD6 = 0;
 
     while(1){
-        int c = getChar() - '0';
+        int c = inkey()-'0';
         if ( c>=0 && c<=3 ) {
-            LATE = (LATE & 0xFFF0) | (0x1 << c);
+            LATE = (LATE & 0xFFF0) | (0x1 << (c));
             n = c;
-        } else {
+        } else if( c+'0'!=0 ) {
             LATE |= 0x000F;
-            n = 0xFF;
+            n = 0x00FF;
             resetCoreTimer();
             while(readCoreTimer()<20000000);
             LATE &= 0xFFF0;
