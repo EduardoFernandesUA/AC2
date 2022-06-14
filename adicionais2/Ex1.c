@@ -43,8 +43,8 @@ int main(void) {
     IEC0bits.T2IE = 1; // ativar pedidos de interrupção do temporizador x
     T2CONbits.TON = 1;
 
-
     EnableInterrupts();
+    
     /* END OF CONFIGURATIONS */ 
 
     LATE &= 0xFFF0;

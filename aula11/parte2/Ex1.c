@@ -1,8 +1,42 @@
 #include <detpic32.h>
 
+typedef struct 
+{ 
+    char mem[100]; // Storage area 
+    int nchar;   // Number of characters to be transmitted 
+    int posrd;   // Position of the next character to be transmitted 
+} t_buf;
+volatile t_buf txbuf;
+
 int round_div(int a,int b) { return (a + b / 2) / b; }
 
+void putc(char byte){
+    while(U2STAbits.UTXBF==1);
+    U2TXREG = byte;
+}
+
+void putstrInt(char *s) {
+    while(txbut.nchar > 0);
+    while( *s!='\0' ) {
+        txbuf.mem[txbuf.nchar++] = *s;
+    }
+    txbuf.posrd = 0;
+    IEC1bits.U2TXIE = 1;
+}
+
+void _int_(32) isr_uart2(void) 
+{ 
+    if ( IFS1bits.U2RXIF==1 ) {
+        char c = U2RXREG;
+        if( c=='T' ) LATCbits.LATC14 = 1;
+        else LATCbits.LATC14 = 0;
+        putc(c);
+        IFS1bits.U2RXIF = 0; 
+    }
+}
+
 int main(void) {
+    TRISCbits.TRISC14 = 0;
 
     int baud_rate = 115200;
     int ovs_factor[2] = { 16,4 };
@@ -13,7 +47,7 @@ int main(void) {
     U2MODEbits.PDSEL = 0; // 0 (8N), 1 (8E), 2 (8O), 3 (9N) --- ver manual
     U2MODEbits.STSEL = 0; // 0 (1 stop bits), 1 (2 stop bits) --- ver manual
     U2STAbits.UTXEN = 1; // ativa transmissão (ver nota abaixo)
-    U2STAbits.URXEN = 0; // ativa receção (ver nota abaixo)
+    U2STAbits.URXEN = 1; // ativa receção (ver nota abaixo)
     U2MODEbits.ON = 1; // ativa UART
 
     U2STAbits.UTXISEL = 0; // quando se pede interrupção do lado tx (ver manual)

@@ -13,12 +13,10 @@ void putc(char byte2send) {
 }
 
 void putstr(char *str) {
-    int i;
-    for (i = 0; str[i] != '\0'; i++)
-    {
-        putc(str[i]);
+    while( *str!='\0' ) {
+        putc(*str);
+        str++;
     }
-    
 }
 
 char getc() {
