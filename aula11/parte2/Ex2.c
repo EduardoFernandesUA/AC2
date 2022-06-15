@@ -15,6 +15,7 @@ void putstrInt(char *s) {
     while( *s!='\0' ) {
         txbuf.mem[txbuf.nchar++] = *s;
         s++;
+        
     }
     txbuf.posrd = 0;
     IEC1bits.U2TXIE = 1;
