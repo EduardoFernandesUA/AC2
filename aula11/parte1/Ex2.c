@@ -34,7 +34,7 @@ int main(void) {
     U2MODEbits.ON = 1; // ativa UART
 
     U2STAbits.UTXISEL = 0; // quando se pede interrupção do lado tx (ver manual)
-    U2STAbits.URXISEL = 1; // quando se pede interrupção do lado rx (ver manual)
+    U2STAbits.URXISEL = 0; // quando se pede interrupção do lado rx (ver manual)
     IPC8bits.U2IP = 1; // prioridade da interrupção (1 a 6)
     IFS1bits.U2TXIF = 0; // limpar pedido de interrupção do lado tx
     IFS1bits.U2RXIF = 0; // limpar pedido de interrupção do lado rx
